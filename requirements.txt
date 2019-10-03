@@ -1,4 +1,4 @@
--atplotlib==2.2.2
+matplotlib==2.2.2
 absl-py==0.8.0
 alabaster==0.7.10
 anaconda-client==1.6.14

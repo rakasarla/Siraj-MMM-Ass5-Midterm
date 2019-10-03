@@ -7,6 +7,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 import json
 import sys
 import os
+import ml.code.diagnosis
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -33,7 +34,7 @@ def login():
             return json.dumps({'status': 'Both fields required'})
         return render_template('login.html', form=form)
     user = helpers.get_user()
-    return render_template('home.html', user=user)
+    return render_template('pneumonia.html', user=user)
 
 
 @app.route("/logout")
@@ -77,6 +78,69 @@ def settings():
         user = helpers.get_user()
         return render_template('settings.html', user=user)
     return redirect(url_for('login'))
+
+# -------- Pneumonia ---------------------------------------------------------- #
+@app.route('/pneumonia', methods=['GET', 'POST'])
+def pneumonia():
+    if session.get('logged_in'):
+        if request.method == 'POST':
+            password = request.form['password']
+            if password != "":
+                password = helpers.hash_password(password)
+            email = request.form['email']
+            helpers.change_user(password=password, email=email)
+            return json.dumps({'status': 'Saved'})
+        user = helpers.get_user()
+        return render_template('pneumonia.html', user=user)
+    return redirect(url_for('login'))
+
+
+# -------- Upload ---------------------------------------------------------- #
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+    print("APP_ROOT:" + APP_ROOT)
+    # folder_name = request.form['superhero']
+    folder_name = "images"
+    '''
+    # this is to verify that folder to upload to exists.
+    if os.path.isdir(os.path.join(APP_ROOT, 'files/{}'.format(folder_name))):
+        print("folder exist")
+    '''
+    target = os.path.join(APP_ROOT, 'files/{}'.format(folder_name))
+    print("TargetFolder:" + target)
+    if not os.path.isdir(target):
+        os.mkdir(target)
+    print(request.files.getlist("file"))
+    for upload in request.files.getlist("file"):
+        print(upload)
+        print("{} is the file name".format(upload.filename))
+        filename = upload.filename
+        # This is to verify files are supported
+        ext = os.path.splitext(filename)[1]
+        if (ext == ".jpg") or (ext == ".png"):
+            print("File supported moving on...")
+        else:
+            render_template("Error.html", message="Files uploaded are not supported...")
+        destination = "/".join([target, filename])
+        print("Accept incoming file:", filename)
+        print("Save it to:", destination)
+        upload.save(destination)
+
+    # return send_from_directory("images", filename, as_attachment=True)
+    return render_template("processImage.html", image_name=filename)
+
+# -------- Process ---------------------------------------------------------- #
+@app.route('/process', methods=['GET', 'POST'])
+def process():
+    # try:
+    diagnosis = ml.code.diagnosis.get_diagnosis()
+    # except:
+        # diagnosis = 9999
+
+    return("<h1>Processed Image " + request.form['image_name'] + 
+           "<br>Yahooooooooooooooooooooooo" +
+           "<br>Diagnosis:" + str(diagnosis) + "</h1>")
 
 
 # ======== Main ============================================================== #

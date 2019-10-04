@@ -152,9 +152,11 @@ def process():
         # diag = 9999
 
     print("Returned Value:" + str(diag))
-    return("<h1>Processed Image " + folder_name + 
-           "<br>Yahooooooooooooooooooooooo" +
-           "<br>Diagnosis:" + str(diag) + "</h1>")
+    # return("<h1>Processed Image " + folder_name + 
+    #        "<br>Yahooooooooooooooooooooooo" +
+    #        "<br>Diagnosis:" + str(diag) + "</h1>")
+    
+    return render_template("processResult.html", folder_name=folder_name, diag=diag)
 
 
 # ======== Main ============================================================== #

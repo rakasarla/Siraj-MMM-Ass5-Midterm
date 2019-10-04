@@ -18,6 +18,7 @@
 # ```
 
 import os
+import sys
 import keras; print("Keras:" + keras.__version__)
 from keras.preprocessing.image import ImageDataGenerator
 
@@ -31,6 +32,28 @@ def get_diagnosis(testing_directory):
     # Preprocessing
     # Configure input/ output directory
     # Configure training, validation, testing directory
+
+    # following is not required; what worked is clear_session before and after predict
+    # try:
+    #     del batch_size
+    #     del class_mode
+    #     del cur_dir
+    #     del dir_name
+    #     del dirs
+    #     del figure_directory
+    #     del input_directory
+    #     del model_file
+    #     del model_names
+    #     del output_directory
+    #     del rescale
+    #     del target_size
+    #     del test_datagen
+    #     del test_generator
+    #     del testing_dir
+    #     del y_pred
+    #     keras.backend.clear_session()
+    # except:
+    #     print("Error deleting variables, Warning:" + str(sys.exc_info()[0]))
 
     print("Current Working Directory:" + os.getcwd())
     print("Directory Passed:" + testing_directory)
@@ -80,13 +103,22 @@ def get_diagnosis(testing_directory):
     model_file = cur_dir+model_names[i]
     print(model_file)
 
+    keras.backend.clear_session()
     model = keras.models.load_model(model_file)
-
 
     y_pred = model.predict_generator(test_generator, steps=len(test_generator), verbose=1)  
     y_pred = y_pred.argmax(axis=-1)
-
-    return y_pred[0]
+    keras.backend.clear_session()
+    print("Y prediction is:" + str(y_pred))
+    print("File list is:" + str(test_generator.filenames))
+    fileList = [w.replace('NORMAL\\', '') for w in test_generator.filenames]
+    print("File list is:" + str(fileList))
+    retObj = {}
+    for i in range(len(fileList)):
+        retObj.update({fileList[i] : y_pred[i]})
+    
+    print("Return Dict:" + str(retObj)) 
+    return retObj
 
 
 

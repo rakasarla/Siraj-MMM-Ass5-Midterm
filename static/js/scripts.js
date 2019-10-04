@@ -101,8 +101,8 @@ $("#file-picker").change(function(){
   {
   //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
       var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
-
-      if ((ext == 'jpg') || (ext == 'png'))
+      // alert('File Extension:' + ext);
+      if ((ext == 'jpg') || (ext == 'png') || (ext == 'jpeg'))
       {
           $("#msg").text("Files are supported")
       }

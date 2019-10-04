@@ -7,7 +7,10 @@ from flask import Flask, redirect, url_for, render_template, request, session
 import json
 import sys
 import os
+import time
+import random
 import ml.code.diagnosis
+import ml.code.utils
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -101,24 +104,33 @@ def upload():
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     print("APP_ROOT:" + APP_ROOT)
     # folder_name = request.form['superhero']
-    folder_name = "images"
+    folder_name = "./ml/data/input/test/" + str(time.time()) + "." + str(random.randint(111111, 999999))
+    # create this folder
+    ml.code.utils.mkdir_p(folder_name + "/NORMAL")
+    ml.code.utils.mkdir_p(folder_name + "/PNEUMONIA")
+    folder_name_normal = folder_name + "/NORMAL"
+
     '''
     # this is to verify that folder to upload to exists.
-    if os.path.isdir(os.path.join(APP_ROOT, 'files/{}'.format(folder_name))):
+    if os.path.isdir(os.path.join(APP_ROOT, '/{}'.format(folder_name))):
         print("folder exist")
     '''
-    target = os.path.join(APP_ROOT, 'files/{}'.format(folder_name))
+    print("Current Directory:" + str(os.getcwd()))
+    # target = os.path.join(APP_ROOT, '/{}'.format(folder_name_normal))
+    target = folder_name_normal
     print("TargetFolder:" + target)
     if not os.path.isdir(target):
         os.mkdir(target)
     print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
-        print(upload)
+        # print("Upload File:" + upload)
         print("{} is the file name".format(upload.filename))
         filename = upload.filename
+        print("Filename:" + filename)
         # This is to verify files are supported
         ext = os.path.splitext(filename)[1]
-        if (ext == ".jpg") or (ext == ".png"):
+        print("Extension:" + ext)
+        if (ext == ".jpg") or (ext == ".png") or (ext == ".jpeg"):
             print("File supported moving on...")
         else:
             render_template("Error.html", message="Files uploaded are not supported...")
@@ -128,19 +140,21 @@ def upload():
         upload.save(destination)
 
     # return send_from_directory("images", filename, as_attachment=True)
-    return render_template("processImage.html", image_name=filename)
+    return render_template("processImage.html", folder_name=folder_name)
 
 # -------- Process ---------------------------------------------------------- #
 @app.route('/process', methods=['GET', 'POST'])
 def process():
+    folder_name = request.form['folder_name']
     # try:
-    diagnosis = ml.code.diagnosis.get_diagnosis()
+    diag = ml.code.diagnosis.get_diagnosis(folder_name)
     # except:
-        # diagnosis = 9999
+        # diag = 9999
 
-    return("<h1>Processed Image " + request.form['image_name'] + 
+    print("Returned Value:" + str(diag))
+    return("<h1>Processed Image " + folder_name + 
            "<br>Yahooooooooooooooooooooooo" +
-           "<br>Diagnosis:" + str(diagnosis) + "</h1>")
+           "<br>Diagnosis:" + str(diag) + "</h1>")
 
 
 # ======== Main ============================================================== #

@@ -8,11 +8,11 @@
       <div class="settings-area">    
           <h1 class="title">Processing Image</h1>
           <p class="title is-2"></p>
-          {% if image_name %}
+          {% if folder_name %}
             <div class="field">
                 <form id="process" action="{{ url_for('process') }}" method="POST">
-                  <strong>File To Process: {{ image_name }}</strong><br>
-                  <input type="hidden" name="image_name" value={{ image_name }}>
+                  <strong>Folder To Process: {{ folder_name }}</strong><br>
+                  <input type="hidden" name="folder_name" value={{ folder_name }}>
                   <input type="submit" value="Process" id="login-button">
                 </form>        
             </div>    

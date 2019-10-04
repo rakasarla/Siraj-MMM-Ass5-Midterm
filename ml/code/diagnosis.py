@@ -7,7 +7,7 @@
 # Creation Date: 02-OCT-2019
 # Purpose: Given an lung image, determine if lung has pneumonia 
 # Input Parameters:
-#     ImageFileName
+#     ImageFileFolder
 # Output:
 #     0 = done not have pneumonia
 #     1 = has pneumonia
@@ -26,17 +26,19 @@ def dir_file_count(directory):
     return sum([len(files) for r, d, files in os.walk(directory)])
 
 
-def get_diagnosis():
+def get_diagnosis(testing_directory):
 
     # Preprocessing
     # Configure input/ output directory
     # Configure training, validation, testing directory
 
     print("Current Working Directory:" + os.getcwd())
+    print("Directory Passed:" + testing_directory)
 
     input_directory = r"./ml/data/input/"
     output_directory = r"./ml/data/output/"
-    testing_dir = input_directory + r"test"
+    # testing_dir = input_directory + r"test"
+    testing_dir = testing_directory
     figure_directory = r"./ml/data/output/figures"
 
     if not os.path.exists(figure_directory):

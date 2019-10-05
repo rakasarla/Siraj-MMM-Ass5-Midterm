@@ -9,6 +9,7 @@ import sys
 import os
 import time
 import random
+import shutil
 import ml.code.diagnosis
 import ml.code.utils
 
@@ -151,12 +152,15 @@ def process():
     # except:
         # diag = 9999
 
-    print("Returned Value:" + str(diag))
+    # print("Returned Value:" + str(diag))
     # return("<h1>Processed Image " + folder_name + 
     #        "<br>Yahooooooooooooooooooooooo" +
     #        "<br>Diagnosis:" + str(diag) + "</h1>")
+
+    # delete folder
+    shutil.rmtree(folder_name)
     
-    return render_template("processResult.html", folder_name=folder_name, diag=diag)
+    return render_template("processResult.html", folder_name=folder_name+"/NORMAL", diag=diag)
 
 
 # ======== Main ============================================================== #

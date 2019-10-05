@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+<title>Diagnosis Result</title>
+<header>
+  <style>
+      table, th, td {
+        border: 1px solid black;
+      }
+    </style>
+</header>
+<section class="hero is-primary is-bold is-large">
+  <div class="hero-body">
+      <div class="settings-area">    
+          <h1 class="title">Diagnosis Result</h1>
+          <p class="title is-2"></p>
+          <table>
+            <tr>
+              <th>File Name</th>
+              <th>Prediction</th>
+              <th>Probability</th>
+            </tr>        
+            {% if folder_name %}
+              <td>
+                  {% for key, value in diag.items() %}
+                    <tr>
+                      <td>{{key}}</td>
+                      <td>{{value[0]}}</td>
+                      <td>{{value[1]}}</td>                      
+                    </tr>
+                  {% endfor %}
+              </td>
+            {% endif %}
+            </table>
+          </p>
+      </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="../static/js/scripts.js"></script>
+{% endblock %}
+      

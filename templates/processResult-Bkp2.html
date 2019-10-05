@@ -1,0 +1,27 @@
+<html>
+<head>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+        }
+        </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <th>File Name</th>
+      <th>Prediction</th>
+      <th>Folder Name</th>
+      <th>Image</th>
+    </tr>
+    {% for key, value in diag.items() %}
+      <tr>
+        <td>{{key}}</td>
+        <td>{{value}}</td>
+        <td>{{folder_name}}</td>
+        <td><img src="{{url_for('static', filename='images/N_IM-0010-0001.jpeg')}}" alt="Smiley face" height="100" width="100"/>
+      </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

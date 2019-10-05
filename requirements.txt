@@ -8,3 +8,4 @@ keras==2.2.5
 tensorflow==1.13.1
 tensorflow-estimator==1.13.0
 Pillow==5.1.0
+Flask-Images==3.0.2

@@ -1,31 +1,44 @@
 {% extends "base.html" %}
 {% block body %}
 {% include "navbar.html" %}
-<title>Process Image</title>
-<body></body>
-<section class="hero is-primary is-bold is-large">
+<title>Diagnosis Result</title>
+<header>
+  <style>
+      table, th, td {
+        border: 1px solid black;
+      }
+    </style>
+</header>
+<section class="hero is-primary is-bold is-small">
   <div class="hero-body">
-      <div class="settings-area">    
-          <h1 class="title">Processing Image</h1>
-          <p class="title is-2"></p>
-          {% if folder_name %}
-            <div class="field">
-             <td>
-                {% for key, value in diag.items() %}
-                  <tr>
-                    <td>{{key}}</td>
-                    <td>{{value}}</td>
-                    <td>{{folder_name}}</td>
-                    <div class="image">
-                      <td><img src=".ml/data/input/test/1570185126.0347264.940485/NORMAL/N_IM-0010-0001.jpeg" alt={{key}} width="100" height="100"></td>
-                    </div>
-                  </tr>
-                {% endfor %}
-             </td>
-            </div>    
-          {% endif %}
-          </p>
-      </div>
+    <!-- <div class="container has-text-centered"> -->
+    <div class="container has-text-left">
+      <div id="pneumonia" class="settings-box">
+        <div class="settings-area">    
+          <h1 class="title">Pneumonia Results</h1>         
+          <div class="field">
+            <table>
+              <tr>
+                <th>File Name</th>
+                <th>Prediction</th>
+                <th>Probability</th>
+              </tr>        
+              {% if folder_name %}
+                <td>
+                    {% for key, value in diag.items() %}
+                      <tr>
+                        <td>{{key}}</td>
+                        <td>{{value[0]}}</td>
+                        <td>{{value[1]}}</td>                      
+                      </tr>
+                    {% endfor %}
+                </td>
+              {% endif %}
+              </table>
+          </div>
+        </div>
+      </div>    
+    </div>
   </div>
 </section>
 {% endblock %}

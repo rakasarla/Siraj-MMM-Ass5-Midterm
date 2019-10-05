@@ -107,6 +107,7 @@ def get_diagnosis(testing_directory):
     model = keras.models.load_model(model_file)
 
     y_pred = model.predict_generator(test_generator, steps=len(test_generator), verbose=1)  
+    y_pred_prob = y_pred[:,0]
     y_pred = y_pred.argmax(axis=-1)
     keras.backend.clear_session()
     print("Y prediction is:" + str(y_pred))
@@ -115,7 +116,9 @@ def get_diagnosis(testing_directory):
     print("File list is:" + str(fileList))
     retObj = {}
     for i in range(len(fileList)):
-        retObj.update({fileList[i] : y_pred[i]})
+        retObj.update({fileList[i] : ["Normal" if y_pred[i] == 0 else "Infected", 
+                                      "{:.4%}".format(y_pred_prob[i]) if y_pred[i] == 0 
+                                                 else "{:.4%}".format(1-y_pred_prob[i])]})
     
     print("Return Dict:" + str(retObj)) 
     return retObj

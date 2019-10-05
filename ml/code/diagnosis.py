@@ -112,7 +112,10 @@ def get_diagnosis(testing_directory):
     keras.backend.clear_session()
     print("Y prediction is:" + str(y_pred))
     print("File list is:" + str(test_generator.filenames))
-    fileList = [w.replace('NORMAL\\', '') for w in test_generator.filenames]
+    if sys.platform.startswith('win'):
+        fileList = [w.replace('NORMAL\\', '') for w in test_generator.filenames]
+    else:
+        fileList = [w.replace('NORMAL/', '') for w in test_generator.filenames]
     print("File list is:" + str(fileList))
     retObj = {}
     for i in range(len(fileList)):

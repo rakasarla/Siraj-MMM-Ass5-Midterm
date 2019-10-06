@@ -96,7 +96,7 @@ $("#navbar-burger-id").click(function () {
 $("#file-picker").change(function(){
 
   var input = document.getElementById('file-picker');
-  var submit_form = false;
+  folder_set = false;
   for (var i=0; i<input.files.length; i++)
   {
   //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
@@ -105,7 +105,10 @@ $("#file-picker").change(function(){
       if ((ext == 'jpg') || (ext == 'png') || (ext == 'jpeg'))
       {
           $("#msg").text("Files are supported");
-          submit_form = true;
+          if (folder_set == false) {
+            folder_set = true;
+            document.getElementById("upload").submit(); 
+          }
       }
       else
       {
@@ -114,11 +117,5 @@ $("#file-picker").change(function(){
       }
 
   }
-
-  if (submit_form == true) {
-    submit_form = false;
-    document.getElementById("upload").submit(); 
-  }
-
 
 } );

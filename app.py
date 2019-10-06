@@ -12,9 +12,18 @@ import random
 import shutil
 import ml.code.diagnosis
 import ml.code.utils
+import stripe
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
+
+stripe_keys = {
+  'secret_key': os.environ['STRIPE_SECRET_KEY'],
+  'publishable_key': os.environ['STRIPE_PUBLISHABLE_KEY']
+}
+
+stripe.api_key = stripe_keys['secret_key']
+
 
 # Heroku
 #from flask_heroku import Heroku
@@ -139,14 +148,38 @@ def upload():
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
+        session['folder_name'] = folder_name
 
-    # return send_from_directory("images", filename, as_attachment=True)
-    return render_template("processImage.html", folder_name=folder_name)
+    # return send_from_directory("images", filename, as_attachment=True)    
+    # return render_template("processImage.html", folder_name=folder_name)
+    return render_template("stripeIndex.html", key=stripe_keys['publishable_key'])
+
+
+@app.route('/stripeCharge', methods=['POST'])
+def stripeCharge():
+    try:
+        amount = 500   # amount in cents
+        customer = stripe.Customer.create(
+            email='sample@customer.com',
+            source=request.form['stripeToken']
+        )
+        stripe.Charge.create(
+            customer=customer.id,
+            amount=amount,
+            currency='usd',
+            description='Diagnosis Charge'
+        )
+        return render_template('stripeCharge.html', amount=amount)
+    except stripe.error.StripeError:
+        return render_template('stripeError.html')
+
+
+
 
 # -------- Process ---------------------------------------------------------- #
 @app.route('/process', methods=['GET', 'POST'])
 def process():
-    folder_name = request.form['folder_name']
+    folder_name = session['folder_name']
     # try:
     diag = ml.code.diagnosis.get_diagnosis(folder_name)
     # except:
@@ -159,6 +192,9 @@ def process():
 
     # delete folder
     shutil.rmtree(folder_name)
+
+    # remove session value
+    session.pop('folder_name', None)  
     
     return render_template("processResult.html", folder_name=folder_name+"/NORMAL", diag=diag)
 

@@ -105,6 +105,7 @@ $("#file-picker").change(function(){
       if ((ext == 'jpg') || (ext == 'png') || (ext == 'jpeg'))
       {
           $("#msg").text("Files are supported")
+          document.getElementById("upload").submit(); 
       }
       else
       {

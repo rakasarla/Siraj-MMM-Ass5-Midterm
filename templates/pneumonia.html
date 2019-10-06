@@ -12,9 +12,9 @@
           <div class="field">
             <form id="upload" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
               <strong>Files:</strong><br>
-              <input id="file-picker" type="file" name="file" accept="image/*" multiple>
+              <input id="file-picker" type="file" name="file" accept="image/*" multiple >
               <div id="msg"></div>
-              <input type="submit" value="Upload!" id="upload-button">
+              <input type="hidden" value="Upload!" id="upload-button">
             </form>        
           </div>
         </div>

@@ -14,6 +14,8 @@
               <strong>Files:</strong><br>
               <input id="file-picker" type="file" name="file" accept="image/*" multiple >
               <div id="msg"></div>
+            </form>        
+            <form id="upload2" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
               <input type="hidden" value="Upload!" id="upload-button">
             </form>        
           </div>

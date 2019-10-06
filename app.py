@@ -93,7 +93,7 @@ def settings():
     return redirect(url_for('login'))
 
 # -------- Pneumonia ---------------------------------------------------------- #
-@app.route('/pneumonia', methods=['GET', 'POST'])
+@app.route('/pneumonia', methods=['POST'])
 def pneumonia():
     if session.get('logged_in'):
         if request.method == 'POST':
@@ -109,7 +109,7 @@ def pneumonia():
 
 
 # -------- Upload ---------------------------------------------------------- #
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
     APP_ROOT = os.path.dirname(os.path.abspath(__file__))
     print("APP_ROOT:" + APP_ROOT)
@@ -177,7 +177,7 @@ def stripeCharge():
 
 
 # -------- Process ---------------------------------------------------------- #
-@app.route('/process', methods=['GET', 'POST'])
+@app.route('/process', methods=['POST'])
 def process():
     folder_name = session['folder_name']
     # try:

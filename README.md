@@ -34,3 +34,9 @@ python app.py
 
 ## Contributing
 Please take a look at our [contributing](https://github.com/anfederico/Flaskex/blob/master/CONTRIBUTING.md) guidelines if you're interested in helping!
+
+
+## Assignment - Midterm
+- Date: 06-Oct-2019
+- Deployed on Heroku: https://siraj-ass5-midterm.herokuapp.com/
+- Feed X Ray files, some sample files are in files directory in this repo

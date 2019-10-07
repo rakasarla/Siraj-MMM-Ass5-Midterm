@@ -33,28 +33,6 @@ def get_diagnosis(testing_directory):
     # Configure input/ output directory
     # Configure training, validation, testing directory
 
-    # following is not required; what worked is clear_session before and after predict
-    # try:
-    #     del batch_size
-    #     del class_mode
-    #     del cur_dir
-    #     del dir_name
-    #     del dirs
-    #     del figure_directory
-    #     del input_directory
-    #     del model_file
-    #     del model_names
-    #     del output_directory
-    #     del rescale
-    #     del target_size
-    #     del test_datagen
-    #     del test_generator
-    #     del testing_dir
-    #     del y_pred
-    #     keras.backend.clear_session()
-    # except:
-    #     print("Error deleting variables, Warning:" + str(sys.exc_info()[0]))
-
     print("Current Working Directory:" + os.getcwd())
     print("Directory Passed:" + testing_directory)
 
@@ -124,6 +102,31 @@ def get_diagnosis(testing_directory):
                                                  else "{:.4%}".format(1-y_pred_prob[i])]})
     
     print("Return Dict:" + str(retObj)) 
+
+
+    # following is not required; what worked is clear_session before and after predict
+    # Heroku is erroring out with memory errors, clear out vaiables
+    try:
+        del batch_size
+        del class_mode
+        del cur_dir
+        del dir_name
+        del dirs
+        del figure_directory
+        del input_directory
+        del model_file
+        del model_names
+        del output_directory
+        del rescale
+        del target_size
+        del test_datagen
+        del test_generator
+        del testing_dir
+        del y_pred
+    except:
+        print("Error deleting variables, Warning:" + str(sys.exc_info()[0]))
+
+
     return retObj
 
 
